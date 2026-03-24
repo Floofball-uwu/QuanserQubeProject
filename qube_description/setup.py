@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+from glob import glob
+import os
 
 package_name = 'qube_description'
 
@@ -10,12 +12,14 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'urdf'), glob('urdf/*')),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='floofer',
     maintainer_email='59265546+Floofball-uwu@users.noreply.github.com',
-    description='TODO: Package description',
+    description='Qube description package',
     license='TODO: License declaration',
     extras_require={
         'test': [
@@ -24,6 +28,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'simple_joint_publisher = qube_description.joint_state_publisher_node:main',
         ],
     },
 )
