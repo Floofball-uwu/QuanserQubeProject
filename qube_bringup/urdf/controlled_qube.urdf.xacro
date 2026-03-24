@@ -3,7 +3,7 @@
 
 <xacro:arg name="baud_rate" default="115200"/> <!--Communication baud rate of Arduino-->
 <xacro:arg name="device" default="none"/> <!--Name of USB device-->
-<xacro:arg name="simulation" default="false"/> <!--Whether this should be run as a simulation-->
+<xacro:arg name="simulation" default="true"/> <!--Whether this should be run as a simulation-->
 
 <xacro:include filename="$(find qube_driver)/ros2_control/qube_driver.ros2_control.xacro"/>
 <xacro:qube_driver_ros2_control 
