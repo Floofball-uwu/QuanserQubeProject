@@ -4,7 +4,7 @@
   <name>qube_driver</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="59265546+Floofball-uwu@users.noreply.github.com">floofer</maintainer>
+  <maintainer email="adam.l.kleppe@ntnu.no">adamleon</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

@@ -4,12 +4,68 @@ project(qube_driver)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(hardware_interface REQUIRED)
+find_package(controller_manager REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(pluginlib REQUIRED)
+
+include(FetchContent)
+set(SERIAL_BUILD_EXAMPLES OFF)
+FetchContent_Declare(
+  serial
+  GIT_REPOSITORY https://github.com/markaren/serial.git
+  GIT_TAG main
+  )
+  FetchContent_MakeAvailable(serial)
+    
+  add_library(qube_driver
+  SHARED
+  src/qube_driver.cpp
+  )
+  
+  target_include_directories(qube_driver
+  PRIVATE
+  include
+  )
+  
+  target_link_libraries(qube_driver serial)
+  ament_target_dependencies(qube_driver
+  hardware_interface
+  controller_manager
+  pluginlib
+  rclcpp
+  )
+  
+  target_link_libraries(qube_driver serial)
+  pluginlib_export_plugin_description_file(hardware_interface hardware_interface_plugin.xml)
+  
+  
+  ## EXPORTS
+  ament_export_dependencies(
+    hardware_interface
+    controller_manager
+    pluginlib
+    serial
+    rclcpp
+    )
+    ament_export_libraries(
+      qube_driver
+      )
+      
+install(
+  TARGETS qube_driver
+  DESTINATION lib
+)
+
+# Install launch files.
+install(DIRECTORY
+  config
+  launch
+  ros2_control
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
