@@ -67,7 +67,7 @@
       <parent link="${prefix}body_link"/>
       <child link="${prefix}disk_link"/>
       <origin xyz="0 0 ${box_z/2 + disk_length/2}"/>
-      <axis xyz="0 0 1"/>
+      <axis xyz="0 0 -1"/>
       <limit lower="-1.5708" upper="1.5708" effort="100" velocity="100"/>
     </joint>
 

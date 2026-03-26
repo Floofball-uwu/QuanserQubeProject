@@ -3,24 +3,24 @@
 
 <xacro:arg name="baud_rate" default="115200"/> <!--Communication baud rate of Arduino-->
 <xacro:arg name="device" default="none"/> <!--Name of USB device-->
-<xacro:arg name="simulation" default="true"/> <!--Whether this should be run as a simulation-->
+<xacro:arg name="simulation" default="false"/> <!--Whether this should be run as a simulation-->
 
 <xacro:include filename="$(find qube_driver)/ros2_control/qube_driver.ros2_control.xacro"/>
 <xacro:qube_driver_ros2_control 
-    name="qube_driver" 
-    prefix="qube_" 
+    name="driver_" 
+    prefix="" 
     baud_rate="$(arg baud_rate)" 
     device="$(arg device)" 
     simulation="$(arg simulation)"/> <!--prefix for driver must be the same as for qube macro-->
 
 
 <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
-<xacro:qube prefix="qube_"/>
+<xacro:qube prefix=""/>
 
 <link name="world"/>
 <joint name="world_to_base" type="fixed">
 <parent link="world"/>
-<child link="qube_base_link"/>
+<child link="base_link"/>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
 

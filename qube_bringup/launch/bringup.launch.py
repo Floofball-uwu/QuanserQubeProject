@@ -8,17 +8,21 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration, TextSubstitution
 
+#Launch command:
+#ros2 launch qube_bringup bringup.launch.py kp:=30.0 ki:=0 kd:=2 reference:=0 device:=/dev/ttyACM0 simulation:=false
+
 def launch_setup(context, *args, **kwargs):
     #Parsing the launch file parses XACRO too, instead it has to be after arguments are resolved
     #For consistency, do this thing for all parameters
     #However, this makes them default to strings!
-    baud_rate  = LaunchConfiguration("baud_rate").perform(context)
-    device     = LaunchConfiguration("device").perform(context)
+    baud_rate = LaunchConfiguration("baud_rate").perform(context)
+    device = LaunchConfiguration("device").perform(context)
     simulation = LaunchConfiguration("simulation").perform(context)
-    kp         = LaunchConfiguration("kp").perform(context)
-    ki         = LaunchConfiguration("ki").perform(context)
-    kd         = LaunchConfiguration("kd").perform(context)
-    reference  = LaunchConfiguration("reference").perform(context)
+    kp = LaunchConfiguration("kp").perform(context)
+    ki = LaunchConfiguration("ki").perform(context)
+    kd = LaunchConfiguration("kd").perform(context)
+    reference = LaunchConfiguration("reference").perform(context)
+    max_velocity = LaunchConfiguration("max_velocity").perform(context)
 
     #Load the "scene" file
     xacroFile = os.path.join(get_package_share_directory("qube_bringup"), "urdf/controlled_qube.urdf.xacro")
@@ -26,8 +30,8 @@ def launch_setup(context, *args, **kwargs):
     robot_description_content = xacro.process_file(xacroFile,
         mappings = 
         {
-            "baud_rate":  baud_rate,
-            "device":     device,
+            "baud_rate": baud_rate,
+            "device": device,
             "simulation": simulation,
         }
         ).toxml()
@@ -55,10 +59,11 @@ def launch_setup(context, *args, **kwargs):
             package='qube_controller',
             executable='pid_controller',
             parameters=[{
-            "kp":        float(kp),
-            "ki":        float(ki),
-            "kd":        float(kd),
+            "kp": float(kp),
+            "ki": float(ki),
+            "kd": float(kd),
             "reference": float(reference),
+            "max_velocity": float(max_velocity)
             }]
         )
     
@@ -69,17 +74,18 @@ def launch_setup(context, *args, **kwargs):
         pidController
     ]
 
-    return [qubeDriver, rviz, robotState, pidController]
+    return nodes
 
 def generate_launch_description():
     launchArgs = [
-        DeclareLaunchArgument("baud_rate",  default_value="115200"),
-        DeclareLaunchArgument("device",     default_value="none"),
-        DeclareLaunchArgument("simulation", default_value="true"),
-        DeclareLaunchArgument("kp",         default_value="1"),
-        DeclareLaunchArgument("ki",         default_value="0"),
-        DeclareLaunchArgument("kd",         default_value="1"),
-        DeclareLaunchArgument("reference",  default_value="0"),
+        DeclareLaunchArgument("baud_rate", default_value="115200"),
+        DeclareLaunchArgument("device", default_value="none"),
+        DeclareLaunchArgument("simulation", default_value="false"),
+        DeclareLaunchArgument("kp", default_value="1"),
+        DeclareLaunchArgument("ki", default_value="0"),
+        DeclareLaunchArgument("kd", default_value="1"),
+        DeclareLaunchArgument("reference", default_value="0"),
+        DeclareLaunchArgument("max_velocity", default_value="10000"),
     ]
 
     return LaunchDescription(launchArgs + [OpaqueFunction(function=launch_setup)])
