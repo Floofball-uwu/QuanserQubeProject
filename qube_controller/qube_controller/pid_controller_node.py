@@ -17,10 +17,10 @@ class QubePidController(Node):
         self.declare_parameter('max_command', 5.0)
 
         self.joint_name = self.get_parameter('joint_name').value
-        self.reference = float(self.get_parameter('reference').value)
-        self.kp = float(self.get_parameter('kp').value)
-        self.ki = float(self.get_parameter('ki').value)
-        self.kd = float(self.get_parameter('kd').value)
+        self.reference = self.get_parameter('reference').get_parameter_value().double_value
+        self.kp = self.get_parameter('kp').get_parameter_value().double_value
+        self.ki = self.get_parameter('ki').get_parameter_value().double_value
+        self.kd = self.get_parameter('kd').get_parameter_value().double_value
         self.max_command = float(self.get_parameter('max_command').value)
 
         self.position = None

@@ -11,6 +11,7 @@ from launch.substitutions import LaunchConfiguration, TextSubstitution
 def launch_setup(context, *args, **kwargs):
     #Parsing the launch file parses XACRO too, instead it has to be after arguments are resolved
     #For consistency, do this thing for all parameters
+    #However, this makes them default to strings!
     baud_rate  = LaunchConfiguration("baud_rate").perform(context)
     device     = LaunchConfiguration("device").perform(context)
     simulation = LaunchConfiguration("simulation").perform(context)
@@ -54,10 +55,10 @@ def launch_setup(context, *args, **kwargs):
             package='qube_controller',
             executable='pid_controller',
             parameters=[{
-            "kp":        kp,
-            "ki":        ki,
-            "kd":        kd,
-            "reference": reference,
+            "kp":        float(kp),
+            "ki":        float(ki),
+            "kd":        float(kd),
+            "reference": float(reference),
             }]
         )
     
