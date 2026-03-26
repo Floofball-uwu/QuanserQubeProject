@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'pid_controller = qube_controller.pid_controller_node:main',
         ],
     },
 )
