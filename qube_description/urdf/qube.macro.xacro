@@ -63,7 +63,7 @@
       <origin xyz="0 0 ${box_z/2}"/>
     </joint>
 
-    <joint name="${prefix}disk_joint" type="revolute">
+    <joint name="${prefix}motor_joint" type="revolute">
       <parent link="${prefix}body_link"/>
       <child link="${prefix}disk_link"/>
       <origin xyz="0 0 ${box_z/2 + disk_length/2}"/>
