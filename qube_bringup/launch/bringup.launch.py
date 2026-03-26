@@ -76,6 +76,7 @@ def launch_setup(context, *args, **kwargs):
 
     return nodes
 
+#This generates the launch description itself
 def generate_launch_description():
     launchArgs = [
         DeclareLaunchArgument("baud_rate", default_value="115200"),
@@ -88,4 +89,6 @@ def generate_launch_description():
         DeclareLaunchArgument("max_velocity", default_value="10000"),
     ]
 
+    #Which returns these arguments alongside a properly parsed launch file alongside xacro
+    #The result is convinient and easy way to change parameters!
     return LaunchDescription(launchArgs + [OpaqueFunction(function=launch_setup)])
