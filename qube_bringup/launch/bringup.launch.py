@@ -14,7 +14,7 @@ from launch.substitutions import LaunchConfiguration, TextSubstitution
 def launch_setup(context, *args, **kwargs):
     #Parsing the launch file parses XACRO too, instead it has to be after arguments are resolved
     #For consistency, do this thing for all parameters
-    #However, this makes them default to strings!
+    #However, this makes them default to strings, requiring casting where necessary!
     baud_rate = LaunchConfiguration("baud_rate").perform(context)
     device = LaunchConfiguration("device").perform(context)
     simulation = LaunchConfiguration("simulation").perform(context)
@@ -30,12 +30,13 @@ def launch_setup(context, *args, **kwargs):
     robot_description_content = xacro.process_file(xacroFile,
         mappings = 
         {
-            "baud_rate": baud_rate,
-            "device": device,
-            "simulation": simulation,
+            "baud_rate": baud_rate, #A number, but in xacro it is a string
+            "device": device, #String
+            "simulation": str(simulation).lower(), #Protect against uppercase
         }
         ).toxml()
 
+    #Load another launch file. Launcheption!
     qubeDriver = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory("qube_driver"), "launch/qube_driver.launch.py")
@@ -45,6 +46,7 @@ def launch_setup(context, *args, **kwargs):
     rviz = Node(
             package="rviz2",
             executable="rviz2",
+            #load rviz setup config
             arguments = [ "-d", [os.path.join(get_package_share_directory("qube_bringup"), "config/config.rviz")]]
         )
 
@@ -52,7 +54,7 @@ def launch_setup(context, *args, **kwargs):
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
-            parameters=[{'robot_description': robot_description_content}] # adds a URDF to the robot description
+            parameters=[{'robot_description': robot_description_content}] #load urdf
         )
     
     pidController = Node(
@@ -86,9 +88,9 @@ def generate_launch_description():
         DeclareLaunchArgument("ki", default_value="0"),
         DeclareLaunchArgument("kd", default_value="1"),
         DeclareLaunchArgument("reference", default_value="0"),
-        DeclareLaunchArgument("max_velocity", default_value="10000"),
+        DeclareLaunchArgument("max_velocity", default_value="500"),
     ]
 
     #Which returns these arguments alongside a properly parsed launch file alongside xacro
-    #The result is convinient and easy way to change parameters!
+    #The result is a convinient and easy way to change parameters!
     return LaunchDescription(launchArgs + [OpaqueFunction(function=launch_setup)])
