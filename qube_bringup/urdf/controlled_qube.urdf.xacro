@@ -8,19 +8,19 @@
 <xacro:include filename="$(find qube_driver)/ros2_control/qube_driver.ros2_control.xacro"/>
 <xacro:qube_driver_ros2_control 
     name="driver_" 
-    prefix="" 
+    prefix=""
     baud_rate="$(arg baud_rate)" 
     device="$(arg device)" 
     simulation="$(arg simulation)"/>
 
 
 <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
-<xacro:qube prefix=""/> <!--prefix for qube macro must be the same as for qube_driver-->
+<xacro:qube prefix=""/> <!--Prefix of this must match Qube macro prefix-->
 
 <link name="world"/>
 <joint name="world_to_base" type="fixed">
 <parent link="world"/>
-<child link="base_link"/> <!--Prefix of this must match Qube macro prefix-->
+<child link="base_link"/> 
 <origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
 

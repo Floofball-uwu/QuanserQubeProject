@@ -4,6 +4,8 @@ This repository contains source code for controlling a Quanser Qube Servo 2 usin
 
 URDF files are included for visualizing the Qube.
 
+For a quick virtual test, run ``ros2 launch qube_bringup bringup.launch.py kp:=1.0 ki:=0 kd:=0.5 reference:=2 simulation:=true``.
+
 **<!> This project was tested on Ubuntu, and thus may not work on Windows. <!>**
 
 # Packages
@@ -14,6 +16,7 @@ Contains the macro description of the Qube itself, alongside a `joint_state` pub
 
 ### qube_controller
 Contains the PID controller itself. This package contains a single node and no launch file. 
+The controller will attempt to move the Qube's disk towards the target position using velocity.
 
 Publishes to `/velocity_controller/commands` of type `Float64MultiArray`. 
 
@@ -45,10 +48,13 @@ Additional parameters when launching this file are provided, which modify the XA
 | baud_rate | unsigned int | `115200` | Baud rate for hardware communication. This must match with what the device supports. |
 | device | String | `none` | USB device to connect to. On Linux it should look something like `/dev/ttyACMx`, where `x` is a number, usually 0. Run `ls /dev/tty*` to check. Full read/write permissions are preferred to avoid issues, so run `sudo chmod 666 /dev/ttyACMx`.|
 
+Changing the name or prefix of the Qube is not supported due to problems with `qube_driver`, but this is not a problem when using this project in isolation.
+
+
 # Launching the project
 The launch file of interest is located in the `qube_bringup` package, named `bringup.launch.py`.
 
-For a quick simulation, run:
+For a virtual simulation, run:
 
 `ros2 launch qube_bringup bringup.launch.py kp:=1.0 ki:=0 kd:=0.5 reference:=2 simulation:=true`.
 
@@ -59,6 +65,8 @@ For a physical test, run:
 Note that the PID coefficients are different for the simulation. That is because the simulation does not model the motor nor inertia of the disk. 
 
 The real example will make the motor feel like a torsion spring when you "wind up" the disk.
+
+With both the virtual and real runs, it may take a small while before the system actually begins to act.
 
 # Pipeline
 

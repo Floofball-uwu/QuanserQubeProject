@@ -70,6 +70,7 @@ class QubePidController(Node):
 
 
     #The PID control itself
+    #Controls velocity to try keeping a constant position.
     def control_loop(self):
         if self.position is None: #Omit if position unknown
             return
