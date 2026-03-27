@@ -18,6 +18,7 @@ def launch_setup(context, *args, **kwargs):
     baud_rate = LaunchConfiguration("baud_rate").perform(context)
     device = LaunchConfiguration("device").perform(context)
     simulation = LaunchConfiguration("simulation").perform(context)
+    joint_name = LaunchConfiguration("joint_name").perform(context)
     kp = LaunchConfiguration("kp").perform(context)
     ki = LaunchConfiguration("ki").perform(context)
     kd = LaunchConfiguration("kd").perform(context)
@@ -61,6 +62,7 @@ def launch_setup(context, *args, **kwargs):
             package='qube_controller',
             executable='pid_controller',
             parameters=[{
+            "joint_name": joint_name,
             "kp": float(kp),
             "ki": float(ki),
             "kd": float(kd),
@@ -84,6 +86,7 @@ def generate_launch_description():
         DeclareLaunchArgument("baud_rate", default_value="115200"),
         DeclareLaunchArgument("device", default_value="none"),
         DeclareLaunchArgument("simulation", default_value="false"),
+        DeclareLaunchArgument("joint_name", default_value="motor_joint"),
         DeclareLaunchArgument("kp", default_value="1"),
         DeclareLaunchArgument("ki", default_value="0"),
         DeclareLaunchArgument("kd", default_value="1"),
