@@ -22,6 +22,8 @@ Publishes to `/velocity_controller/commands` of type `Float64MultiArray`.
 
 Subscribes to `/joint_states`, using its `position` and `velocity`.
 
+To change the target position on runtime, simply change the `reference` parameter.
+
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | joint_name | String | `motor_joint` | Name of joint to control |
@@ -70,5 +72,7 @@ With both the virtual and real runs, it may take a small while before the system
 
 # Pipeline
 
-**TODO: Write properly, preferably make figure**
-**Node -> Topic -> Node -> Topic -> Node**
+A figure of the project's pipeline is shown below.
+For this project's intents and purposes, the `qube_driver` is considered as a black box with some inputs and outputs.
+
+![Pipeline](readme_assets/pipeline.png)
